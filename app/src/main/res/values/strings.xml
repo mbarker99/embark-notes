@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Embark Notes</string>
+    <string name="no_notes_have_been_created">No notes have been created.</string>
+    <string name="add_note">Add note</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
