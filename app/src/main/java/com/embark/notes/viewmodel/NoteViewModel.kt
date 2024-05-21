@@ -1,5 +1,7 @@
 package com.embark.notes.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.embark.notes.model.Note
@@ -12,9 +14,22 @@ import javax.inject.Inject
 class NoteViewModel @Inject internal constructor(
     private val noteRepository: NoteRepository
 ): ViewModel() {
+
+    var notes: List<Note> = listOf()
+
+    private val mGetAllNotesLiveData: MutableLiveData<List<Note>> = MutableLiveData<List<Note>>()
+    val getAllNotesLiveData: LiveData<List<Note>> = mGetAllNotesLiveData
+
     fun insert(note: Note) {
         viewModelScope.launch {
             noteRepository.insertAll(note)
+        }
+    }
+
+    fun getAllNotes() {
+        viewModelScope.launch {
+            notes = noteRepository.getAllNotes()
+            mGetAllNotesLiveData.postValue(notes)
         }
     }
 }
