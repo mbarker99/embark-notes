@@ -5,8 +5,9 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.embark.notes.R
 import com.embark.notes.databinding.FragmentMainBinding
 import com.embark.notes.view.ui.adapter.NotesAdapter
@@ -30,6 +31,7 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
         setupUI()
+        setupObservers()
     }
 
     private fun setupUI() {
@@ -39,14 +41,18 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
             }
 
             viewModel.getAllNotes()
-
             Log.d(TAG, "Notes: viewModel.notes = ${viewModel.notes}")
             rvNotes.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             rvNotes.adapter = notesAdapter
         }
-
-
     }
+
+    private fun setupObservers() {
+        viewModel.getAllNotesLiveData.observe(viewLifecycleOwner, Observer {
+            notesAdapter.setData(it)
+        })
+    }
+
 
 }

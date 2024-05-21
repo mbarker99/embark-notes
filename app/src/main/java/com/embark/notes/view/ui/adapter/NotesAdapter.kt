@@ -1,5 +1,6 @@
 package com.embark.notes.view.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,8 @@ class NotesAdapter(var notes: List<Note>) : RecyclerView.Adapter<NotesAdapter.No
         RecyclerView.ViewHolder(binding.root) {
         fun bind(note: Note) {
             binding.apply {
-
+                tvNoteTitle.text = note.title
+                tvNoteContent.text = note.content
             }
         }
     }
@@ -27,5 +29,11 @@ class NotesAdapter(var notes: List<Note>) : RecyclerView.Adapter<NotesAdapter.No
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         holder.bind(notes[position])
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setData(notes: List<Note>) {
+        this.notes = notes
+        notifyDataSetChanged()
     }
 }

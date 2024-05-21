@@ -2,6 +2,7 @@ package com.embark.notes.view.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.embark.notes.R
@@ -35,11 +36,10 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
                         uuid = UUID.randomUUID().mostSignificantBits,
                         title = this.etNoteTitle.text.toString(),
                         content = this.etNoteContent.text.toString()
-
                     )
                 )
             } else {
-                // TODO : Discard empty note and display Toast/Snackbar to user.
+                Toast.makeText(requireContext(), "Empty note discarded", Toast.LENGTH_LONG).show()
             }
         }
 
