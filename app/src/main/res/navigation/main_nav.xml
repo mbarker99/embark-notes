@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/newNoteFragment"
-        android:name="com.embark.notes.view.ui.fragment.NewNoteFragment"
+        android:name="com.embark.notes.view.ui.fragment.EditNoteFragment"
         android:label="fragment_new_note"
-        tools:layout="@layout/fragment_new_note">
+        tools:layout="@layout/fragment_edit_note">
         <action
             android:id="@+id/action_newNoteFragment_to_mainFragment"
             app:destination="@id/mainFragment" />

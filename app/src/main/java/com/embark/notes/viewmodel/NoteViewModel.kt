@@ -32,4 +32,16 @@ class NoteViewModel @Inject internal constructor(
             mGetAllNotesLiveData.postValue(notes)
         }
     }
+
+    fun delete(note: Note) {
+        viewModelScope.launch {
+            noteRepository.delete(note)
+        }
+    }
+
+    fun update(note: Note) {
+        viewModelScope.launch {
+            noteRepository.update(note)
+        }
+    }
 }

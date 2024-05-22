@@ -7,7 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.embark.notes.databinding.ItemViewNotesBinding
 import com.embark.notes.model.Note
 
-class NotesAdapter(var notes: List<Note>) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+class NotesAdapter(var notes: List<Note>, private val listener: OnNoteClickedListener) :
+    RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+
+    interface OnNoteClickedListener {
+        fun onNoteClicked(note: Note)
+    }
 
     inner class NotesViewHolder(val binding: ItemViewNotesBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -15,6 +20,10 @@ class NotesAdapter(var notes: List<Note>) : RecyclerView.Adapter<NotesAdapter.No
             binding.apply {
                 tvNoteTitle.text = note.title
                 tvNoteContent.text = note.content
+
+                root.setOnClickListener {
+                    listener.onNoteClicked(note)
+                }
             }
         }
     }

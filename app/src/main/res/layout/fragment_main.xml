@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="32dp"
     android:theme="@style/AppTheme"
     tools:context=".view.ui.MainActivity">
 

@@ -10,7 +10,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.embark.notes.R
 import com.embark.notes.databinding.FragmentMainBinding
+import com.embark.notes.model.Note
 import com.embark.notes.view.ui.adapter.NotesAdapter
+import com.embark.notes.view.ui.adapter.NotesAdapter.OnNoteClickedListener
 import com.embark.notes.viewmodel.NoteViewModel
 
 class NotesFragment : Fragment(R.layout.fragment_main) {
@@ -24,7 +26,20 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
     private val viewModel: NoteViewModel by activityViewModels()
 
     private val notesAdapter: NotesAdapter by lazy {
-        NotesAdapter(viewModel.notes)
+        NotesAdapter(viewModel.notes, object : OnNoteClickedListener {
+            override fun onNoteClicked(note: Note) {
+                val noteBundle = Bundle()
+                noteBundle.putLong("index", note.index)
+                noteBundle.putString("title", note.title)
+                noteBundle.putString("content", note.content)
+                noteBundle.putBoolean("isPinned", note.isPinned == true)
+                noteBundle.putLong("lastModified", note.lastModified)
+                findNavController().navigate(
+                    R.id.action_mainFragment_to_newNoteFragment,
+                    noteBundle
+                )
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
