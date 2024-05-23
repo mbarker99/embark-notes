@@ -13,12 +13,23 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteViewModel @Inject internal constructor(
     private val noteRepository: NoteRepository
-): ViewModel() {
+) : ViewModel() {
 
     var notes: List<Note> = listOf()
+    var pinnedNotes: List<Note> = listOf()
+    var unpinnedNotes: List<Note> = listOf()
+    val selectedNote: Note? = null
 
     private val mGetAllNotesLiveData: MutableLiveData<List<Note>> = MutableLiveData<List<Note>>()
     val getAllNotesLiveData: LiveData<List<Note>> = mGetAllNotesLiveData
+
+    private val mGetAllPinnedNotesLiveData: MutableLiveData<List<Note>> =
+        MutableLiveData<List<Note>>()
+    val getAllPinnedNotesLiveData: LiveData<List<Note>> = mGetAllPinnedNotesLiveData
+
+    private val mGetAllUnpinnedNotesLiveData: MutableLiveData<List<Note>> =
+        MutableLiveData<List<Note>>()
+    val getAllUnpinnedNotesLiveData: LiveData<List<Note>> = mGetAllUnpinnedNotesLiveData
 
     fun insert(note: Note) {
         viewModelScope.launch {
@@ -30,6 +41,9 @@ class NoteViewModel @Inject internal constructor(
         viewModelScope.launch {
             notes = noteRepository.getAllNotes()
             mGetAllNotesLiveData.postValue(notes)
+
+            pinnedNotes = notes.filter { it.isPinned == true }
+            unpinnedNotes = notes.filter { it.isPinned == false }
         }
     }
 
@@ -44,4 +58,5 @@ class NoteViewModel @Inject internal constructor(
             noteRepository.update(note)
         }
     }
+
 }

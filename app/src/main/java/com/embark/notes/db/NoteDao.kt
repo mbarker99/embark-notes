@@ -15,6 +15,12 @@ interface NoteDao {
     @Query("SELECT * FROM Note WHERE title LIKE :title LIMIT 1")
     suspend fun getAllNotesByName(title: String) : List<Note>
 
+    @Query("SELECT * FROM Note WHERE isPinned = 1 ORDER BY lastModified DESC")
+    suspend fun getAllPinnedNotes(): List<Note>
+
+    @Query("SELECT * FROM Note WHERE isPinned = 0 ORDER BY lastModified DESC")
+    suspend fun getAllUnpinnedNotes(): List<Note>
+
     @Insert
     suspend fun insertAll(vararg notes: Note)
 

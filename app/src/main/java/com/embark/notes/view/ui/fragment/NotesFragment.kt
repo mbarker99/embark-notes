@@ -25,8 +25,25 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
     private val viewModel: NoteViewModel by activityViewModels()
 
-    private val notesAdapter: NotesAdapter by lazy {
-        NotesAdapter(viewModel.notes, object : OnNoteClickedListener {
+    private val pinnedNotesAdapter: NotesAdapter by lazy {
+        NotesAdapter(viewModel.pinnedNotes, object : OnNoteClickedListener {
+            override fun onNoteClicked(note: Note) {
+                val noteBundle = Bundle()
+                noteBundle.putLong("index", note.index)
+                noteBundle.putString("title", note.title)
+                noteBundle.putString("content", note.content)
+                noteBundle.putBoolean("isPinned", note.isPinned == true)
+                noteBundle.putLong("lastModified", note.lastModified)
+                findNavController().navigate(
+                    R.id.action_mainFragment_to_newNoteFragment,
+                    noteBundle
+                )
+            }
+        })
+    }
+
+    private val unpinnedNotesAdapter: NotesAdapter by lazy {
+        NotesAdapter(viewModel.unpinnedNotes, object : OnNoteClickedListener {
             override fun onNoteClicked(note: Note) {
                 val noteBundle = Bundle()
                 noteBundle.putLong("index", note.index)
@@ -57,15 +74,39 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
 
             viewModel.getAllNotes()
             Log.d(TAG, "Notes: viewModel.notes = ${viewModel.notes}")
-            rvNotes.layoutManager =
+
+            rvPinnedNotes.layoutManager =
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            rvNotes.adapter = notesAdapter
+            rvPinnedNotes.adapter = pinnedNotesAdapter
+
+            rvUnpinnedNotes.layoutManager =
+                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            rvUnpinnedNotes.adapter = unpinnedNotesAdapter
         }
     }
 
     private fun setupObservers() {
         viewModel.getAllNotesLiveData.observe(viewLifecycleOwner, Observer {
-            notesAdapter.setData(it)
+
+            if (viewModel.notes.isEmpty()) {
+                binding.noNotesContainer.visibility = View.VISIBLE
+                binding.notesContainer.visibility = View.GONE
+            } else {
+                binding.noNotesContainer.visibility = View.GONE
+                binding.notesContainer.visibility = View.VISIBLE
+            }
+
+            pinnedNotesAdapter.setData(viewModel.pinnedNotes)
+            unpinnedNotesAdapter.setData(viewModel.unpinnedNotes)
+
+            if (viewModel.pinnedNotes.isEmpty()) {
+                binding.pinnedNotesContainer.visibility = View.GONE
+                binding.tvUnpinnedNotesTitle.visibility = View.GONE
+            } else {
+                binding.pinnedNotesContainer.visibility = View.VISIBLE
+                binding.tvUnpinnedNotesTitle.visibility = View.VISIBLE
+            }
+
         })
     }
 

@@ -1,6 +1,7 @@
 package com.embark.notes.view.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -18,7 +19,8 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
     private var binding: FragmentEditNoteBinding? = null
     private val viewModel: NoteViewModel by activityViewModels()
 
-    private var note: Note? = null
+    private var selectedNote: Note? = null
+    private var toBePinned = false
     private var toBeDeleted = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,7 +29,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
         binding?.apply {
             arguments?.let {
                 if (!it.isEmpty) {
-                    note = Note(
+                    selectedNote = Note(
                         index = it.getLong("index"),
                         title = it.getString("title").toString(),
                         content = it.getString("content").toString(),
@@ -38,18 +40,21 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                     etNoteContent.setText(it.getString("content").toString())
                 }
             }
+
+            if (selectedNote == null) {
+                ivDelete.visibility = View.GONE
+                ivPin.visibility = View.GONE
+            }
+
             ivBackArrow.setOnClickListener {
                 findNavController().popBackStack()
             }
 
-            if (note == null) {
-                ivDelete.visibility = View.GONE
-            }
             ivDelete.setOnClickListener {
                 val builder = AlertDialog.Builder(requireContext())
                     .setMessage("Are you sure you want to delete this note?")
                     .setPositiveButton("Yes") { dialog, id ->
-                        viewModel.delete(note!!)
+                        viewModel.delete(selectedNote!!)
                         toBeDeleted = true
                         dialog.dismiss()
                         findNavController().popBackStack()
@@ -57,6 +62,21 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                         dialog.dismiss()
                     }
                 builder.create().show()
+            }
+
+            if (selectedNote?.isPinned == true) {
+                ivPin.setImageResource(R.drawable.ic_pinned_24)
+            } else {
+                ivPin.setImageResource(R.drawable.ic_unpinned_24)
+            }
+
+            ivPin.setOnClickListener {
+                toBePinned = true
+                if (selectedNote?.isPinned == true) {
+                    ivPin.setImageResource(R.drawable.ic_unpinned_24)
+                } else {
+                    ivPin.setImageResource(R.drawable.ic_pinned_24)
+                }
             }
         }
     }
@@ -70,12 +90,13 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
         super.onPause()
 
         binding?.apply {
-            if (note == null) {
+            if (selectedNote == null) {
                 if (!etNoteTitle.text.isNullOrBlank() || !etNoteContent.text.isNullOrBlank()) {
                     viewModel.insert(
                         Note(
                             title = this.etNoteTitle.text.toString(),
                             content = this.etNoteContent.text.toString(),
+                            isPinned = false,
                             lastModified = System.currentTimeMillis()
                         )
                     )
@@ -84,13 +105,17 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                         .show()
                 }
             } else {
-                if (!toBeDeleted) {
+                if (!toBeDeleted && isModified()) {
+                    Log.i(TAG, "Note updated -- Note=${selectedNote}")
+                    var newPinState = selectedNote?.isPinned
+                    if (toBePinned)
+                        newPinState = !newPinState!!
                     viewModel.update(
                         Note(
-                            index = note!!.index,
+                            index = selectedNote!!.index,
                             title = etNoteTitle.text.toString(),
                             content = etNoteContent.text.toString(),
-                            isPinned = note!!.isPinned,
+                            isPinned = newPinState,
                             lastModified = System.currentTimeMillis()
                         )
                     )
@@ -98,6 +123,12 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
             }
         }
 
+    }
+
+    private fun isModified(): Boolean {
+        return binding!!.etNoteTitle.text.toString() != selectedNote?.title ||
+                binding!!.etNoteContent.text.toString() != selectedNote?.content ||
+                toBePinned
     }
 
     companion object {
