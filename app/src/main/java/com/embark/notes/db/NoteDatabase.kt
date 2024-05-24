@@ -13,7 +13,7 @@ abstract class NoteDatabase : RoomDatabase() {
         val MIGRATION_1_2 = Migration1to2()
 
         @JvmField
-        val MIGRATION_2_3 = Migration1to2()
+        val MIGRATION_2_3 = Migration2to3()
     }
 
 }

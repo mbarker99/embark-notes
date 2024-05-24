@@ -26,8 +26,7 @@ class AppModule {
             context,
             NoteDatabase::class.java,
             "NoteDatabase"
-        ).fallbackToDestructiveMigration()
-            .addMigrations(NoteDatabase.MIGRATION_1_2, NoteDatabase.MIGRATION_2_3)
+        ).addMigrations(NoteDatabase.MIGRATION_1_2, NoteDatabase.MIGRATION_2_3)
             .build()
 
 }

@@ -18,7 +18,9 @@ class NoteViewModel @Inject internal constructor(
     var notes: List<Note> = listOf()
     var pinnedNotes: List<Note> = listOf()
     var unpinnedNotes: List<Note> = listOf()
-    val selectedNote: Note? = null
+
+    var selectedNote: Note? = null
+    var editedNote: Note? = null
 
     private val mGetAllNotesLiveData: MutableLiveData<List<Note>> = MutableLiveData<List<Note>>()
     val getAllNotesLiveData: LiveData<List<Note>> = mGetAllNotesLiveData

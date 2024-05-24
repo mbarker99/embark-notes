@@ -1,7 +1,6 @@
 package com.embark.notes.view.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -19,31 +18,30 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
     private var binding: FragmentEditNoteBinding? = null
     private val viewModel: NoteViewModel by activityViewModels()
 
-    private var selectedNote: Note? = null
-    private var toBePinned = false
+    private var tempIsPinned = false
     private var toBeDeleted = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentEditNoteBinding.bind(view)
-        binding?.apply {
-            arguments?.let {
-                if (!it.isEmpty) {
-                    selectedNote = Note(
-                        index = it.getLong("index"),
-                        title = it.getString("title").toString(),
-                        content = it.getString("content").toString(),
-                        isPinned = it.getBoolean(("isPinned")),
-                        lastModified = it.getLong("lastModified")
-                    )
-                    etNoteTitle.setText(it.getString("title").toString())
-                    etNoteContent.setText(it.getString("content").toString())
-                }
-            }
+        setupUI()
+    }
 
-            if (selectedNote == null) {
+    private fun setupUI() {
+        binding?.apply {
+            if (viewModel.selectedNote != null) {
+                etNoteTitle.setText(viewModel.selectedNote?.title ?: "")
+                etNoteContent.setText(viewModel.selectedNote?.content ?: "")
+                tempIsPinned = viewModel.selectedNote?.isPinned == true
+            } else {
                 ivDelete.visibility = View.GONE
                 ivPin.visibility = View.GONE
+            }
+
+            if (viewModel.selectedNote?.isPinned == true) {
+                ivPin.setImageResource(R.drawable.ic_pinned_24)
+            } else {
+                ivPin.setImageResource(R.drawable.ic_unpinned_24)
             }
 
             ivBackArrow.setOnClickListener {
@@ -52,31 +50,26 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
 
             ivDelete.setOnClickListener {
                 val builder = AlertDialog.Builder(requireContext())
-                    .setMessage("Are you sure you want to delete this note?")
-                    .setPositiveButton("Yes") { dialog, id ->
-                        viewModel.delete(selectedNote!!)
+                    .setMessage(getString(R.string.delete_note_confirmation))
+                    .setPositiveButton(getString(R.string.delete_note_positive_button)) { dialog, _ ->
+                        viewModel.selectedNote?.let { note -> viewModel.delete(note) }
                         toBeDeleted = true
                         dialog.dismiss()
                         findNavController().popBackStack()
-                    }.setNegativeButton("No") { dialog, id ->
+                    }
+                    .setNegativeButton(getString(R.string.delete_note_negative_button)) { dialog, _ ->
                         dialog.dismiss()
                     }
                 builder.create().show()
             }
 
-            if (selectedNote?.isPinned == true) {
-                ivPin.setImageResource(R.drawable.ic_pinned_24)
-            } else {
-                ivPin.setImageResource(R.drawable.ic_unpinned_24)
-            }
-
             ivPin.setOnClickListener {
-                toBePinned = true
-                if (selectedNote?.isPinned == true) {
+                if (tempIsPinned) {
                     ivPin.setImageResource(R.drawable.ic_unpinned_24)
                 } else {
                     ivPin.setImageResource(R.drawable.ic_pinned_24)
                 }
+                tempIsPinned = !tempIsPinned
             }
         }
     }
@@ -90,32 +83,31 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
         super.onPause()
 
         binding?.apply {
-            if (selectedNote == null) {
+            if (viewModel.selectedNote == null) {
                 if (!etNoteTitle.text.isNullOrBlank() || !etNoteContent.text.isNullOrBlank()) {
                     viewModel.insert(
                         Note(
                             title = this.etNoteTitle.text.toString(),
                             content = this.etNoteContent.text.toString(),
-                            isPinned = false,
                             lastModified = System.currentTimeMillis()
                         )
                     )
                 } else {
-                    Toast.makeText(requireContext(), "Empty note discarded", Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.empty_note_discarded),
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                 }
             } else {
                 if (!toBeDeleted && isModified()) {
-                    Log.i(TAG, "Note updated -- Note=${selectedNote}")
-                    var newPinState = selectedNote?.isPinned
-                    if (toBePinned)
-                        newPinState = !newPinState!!
                     viewModel.update(
                         Note(
-                            index = selectedNote!!.index,
+                            index = viewModel.selectedNote!!.index,
                             title = etNoteTitle.text.toString(),
                             content = etNoteContent.text.toString(),
-                            isPinned = newPinState,
+                            isPinned = tempIsPinned,
                             lastModified = System.currentTimeMillis()
                         )
                     )
@@ -126,9 +118,9 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
     }
 
     private fun isModified(): Boolean {
-        return binding!!.etNoteTitle.text.toString() != selectedNote?.title ||
-                binding!!.etNoteContent.text.toString() != selectedNote?.content ||
-                toBePinned
+        return binding!!.etNoteTitle.text.toString() != viewModel.selectedNote?.title ||
+                binding!!.etNoteContent.text.toString() != viewModel.selectedNote?.content ||
+                viewModel.selectedNote?.isPinned != tempIsPinned
     }
 
     companion object {

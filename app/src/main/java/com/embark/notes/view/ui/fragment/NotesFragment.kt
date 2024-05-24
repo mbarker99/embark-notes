@@ -28,16 +28,8 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
     private val pinnedNotesAdapter: NotesAdapter by lazy {
         NotesAdapter(viewModel.pinnedNotes, object : OnNoteClickedListener {
             override fun onNoteClicked(note: Note) {
-                val noteBundle = Bundle()
-                noteBundle.putLong("index", note.index)
-                noteBundle.putString("title", note.title)
-                noteBundle.putString("content", note.content)
-                noteBundle.putBoolean("isPinned", note.isPinned == true)
-                noteBundle.putLong("lastModified", note.lastModified)
-                findNavController().navigate(
-                    R.id.action_mainFragment_to_newNoteFragment,
-                    noteBundle
-                )
+                viewModel.selectedNote = note
+                findNavController().navigate(R.id.action_mainFragment_to_newNoteFragment)
             }
         })
     }
@@ -45,15 +37,9 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
     private val unpinnedNotesAdapter: NotesAdapter by lazy {
         NotesAdapter(viewModel.unpinnedNotes, object : OnNoteClickedListener {
             override fun onNoteClicked(note: Note) {
-                val noteBundle = Bundle()
-                noteBundle.putLong("index", note.index)
-                noteBundle.putString("title", note.title)
-                noteBundle.putString("content", note.content)
-                noteBundle.putBoolean("isPinned", note.isPinned == true)
-                noteBundle.putLong("lastModified", note.lastModified)
+                viewModel.selectedNote = note
                 findNavController().navigate(
-                    R.id.action_mainFragment_to_newNoteFragment,
-                    noteBundle
+                    R.id.action_mainFragment_to_newNoteFragment
                 )
             }
         })
