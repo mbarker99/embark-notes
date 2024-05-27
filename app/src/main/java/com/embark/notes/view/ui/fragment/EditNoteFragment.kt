@@ -2,7 +2,6 @@ package com.embark.notes.view.ui.fragment
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -11,6 +10,7 @@ import com.embark.notes.databinding.FragmentEditNoteBinding
 import com.embark.notes.model.Note
 import com.embark.notes.viewmodel.NoteViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 
 
 class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
@@ -95,12 +95,11 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                         )
                     )
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.empty_note_discarded),
-                        Toast.LENGTH_LONG
-                    )
-                        .show()
+                    Snackbar.make(
+                        binding?.root as View,
+                        R.string.empty_note_discarded,
+                        Snackbar.ANIMATION_MODE_SLIDE
+                    ).show()
                 }
             } else {
                 if (!toBeDeleted && isModified()) {

@@ -10,12 +10,6 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="3dp">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="2dp"
-        app:cardCornerRadius="8dp">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -44,11 +38,5 @@
                 tools:text="Note" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <!--
-
-    -->
 
 </androidx.cardview.widget.CardView>

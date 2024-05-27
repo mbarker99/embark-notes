@@ -57,6 +57,7 @@
                 android:backgroundTint="@color/md_theme_primary"
                 android:hint="@string/title"
                 android:inputType="text|textMultiLine"
+                android:maxLength="1000"
                 android:paddingVertical="8dp"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"

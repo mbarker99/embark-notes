@@ -3,6 +3,7 @@ package com.embark.notes.db
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.embark.notes.model.Note
@@ -22,7 +23,7 @@ interface NoteDao {
     @Query("SELECT * FROM ${Constants.DB_NAME} WHERE ${Constants.DB_IS_PINNED} = 0 ORDER BY ${Constants.DB_LAST_MODIFIED} DESC")
     suspend fun getAllUnpinnedNotes(): List<Note>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg notes: Note)
 
     @Delete

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/checklist"
+        android:icon="@drawable/ic_checkbox_24"
+        android:title="New checklist"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/voice_memo"
+        android:icon="@drawable/ic_mic_24"
+        android:title="New voice memo"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/image"
+        android:icon="@drawable/ic_image_24"
+        android:title="New image"
+        app:showAsAction="ifRoom" />
+</menu>

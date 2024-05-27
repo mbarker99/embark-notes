@@ -12,4 +12,5 @@
     <string name="delete_note_dialog_message">This note will be permanently removed from the device.</string>
     <string name="delete_note_positive_button">Delete</string>
     <string name="delete_note_negative_button">Cancel</string>
+    <string name="searchbar_hint">Search your notes</string>
 </resources>

@@ -74,13 +74,13 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
     private fun setupObservers() {
         viewModel.getAllNotesLiveData.observe(viewLifecycleOwner, Observer {
 
-            if (viewModel.notes.isEmpty()) {
+            /*if (viewModel.notes.isEmpty()) {
                 binding.noNotesContainer.visibility = View.VISIBLE
                 binding.notesContainer.visibility = View.GONE
             } else {
                 binding.noNotesContainer.visibility = View.GONE
                 binding.notesContainer.visibility = View.VISIBLE
-            }
+            }*/
 
             pinnedNotesAdapter.setData(viewModel.pinnedNotes)
             unpinnedNotesAdapter.setData(viewModel.unpinnedNotes)
