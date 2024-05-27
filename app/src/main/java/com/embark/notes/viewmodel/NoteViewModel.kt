@@ -22,6 +22,8 @@ class NoteViewModel @Inject internal constructor(
     var selectedNote: Note? = null
     var editedNote: Note? = null
 
+    var discardingEmptyNote = false
+
     private val mGetAllNotesLiveData: MutableLiveData<List<Note>> = MutableLiveData<List<Note>>()
     val getAllNotesLiveData: LiveData<List<Note>> = mGetAllNotesLiveData
 

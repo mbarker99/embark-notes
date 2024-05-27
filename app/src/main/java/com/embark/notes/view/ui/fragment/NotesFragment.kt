@@ -14,6 +14,7 @@ import com.embark.notes.model.Note
 import com.embark.notes.view.ui.adapter.NotesAdapter
 import com.embark.notes.view.ui.adapter.NotesAdapter.OnNoteClickedListener
 import com.embark.notes.viewmodel.NoteViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class NotesFragment : Fragment(R.layout.fragment_main) {
 
@@ -68,6 +69,27 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
             rvUnpinnedNotes.layoutManager =
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             rvUnpinnedNotes.adapter = unpinnedNotesAdapter
+
+            searchBar.inflateMenu(R.menu.search_bar)
+            searchBar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.layout -> {
+                        // TODO : Change layout of notes from StaggeredGrid to Linear
+                    }
+                }
+                return@setOnMenuItemClickListener true
+            }
+
+            if (viewModel.discardingEmptyNote) {
+                Snackbar.make(
+                    binding.root as View,
+                    R.string.empty_note_discarded,
+                    Snackbar.LENGTH_LONG
+                ).setAnchorView(binding.bottomAppBar)
+                    .show()
+                viewModel.discardingEmptyNote = false
+            }
+
         }
     }
 
