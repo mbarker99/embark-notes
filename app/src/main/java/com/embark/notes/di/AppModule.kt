@@ -21,12 +21,17 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideNoteDatabase(@ApplicationContext context: Context) : NoteDatabase =
+    fun provideNoteDatabase(@ApplicationContext context: Context): NoteDatabase =
         Room.databaseBuilder(
             context,
             NoteDatabase::class.java,
             "NoteDatabase"
-        ).addMigrations(NoteDatabase.MIGRATION_1_2, NoteDatabase.MIGRATION_2_3)
+        ).fallbackToDestructiveMigration()
+            .addMigrations(
+                NoteDatabase.MIGRATION_1_2,
+                NoteDatabase.MIGRATION_2_3,
+                NoteDatabase.MIGRATION_3_4
+            )
             .build()
 
 }

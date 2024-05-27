@@ -3,7 +3,6 @@ package com.embark.notes.view.ui.fragment
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -11,6 +10,7 @@ import com.embark.notes.R
 import com.embark.notes.databinding.FragmentEditNoteBinding
 import com.embark.notes.model.Note
 import com.embark.notes.viewmodel.NoteViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
@@ -49,8 +49,9 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
             }
 
             ivDelete.setOnClickListener {
-                val builder = AlertDialog.Builder(requireContext())
-                    .setMessage(getString(R.string.delete_note_confirmation))
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.delete_note_dialog_title))
+                    .setMessage(getString(R.string.delete_note_dialog_message))
                     .setPositiveButton(getString(R.string.delete_note_positive_button)) { dialog, _ ->
                         viewModel.selectedNote?.let { note -> viewModel.delete(note) }
                         toBeDeleted = true
@@ -60,7 +61,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                     .setNegativeButton(getString(R.string.delete_note_negative_button)) { dialog, _ ->
                         dialog.dismiss()
                     }
-                builder.create().show()
+                    .show()
             }
 
             ivPin.setOnClickListener {
@@ -89,7 +90,8 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                         Note(
                             title = this.etNoteTitle.text.toString(),
                             content = this.etNoteContent.text.toString(),
-                            lastModified = System.currentTimeMillis()
+                            lastModified = System.currentTimeMillis(),
+                            createdAt = System.currentTimeMillis()
                         )
                     )
                 } else {
@@ -108,13 +110,14 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                             title = etNoteTitle.text.toString(),
                             content = etNoteContent.text.toString(),
                             isPinned = tempIsPinned,
-                            lastModified = System.currentTimeMillis()
+                            lastModified = System.currentTimeMillis(),
+                            createdAt = viewModel.selectedNote!!.createdAt
                         )
                     )
                 }
             }
         }
-
+        viewModel.selectedNote = null
     }
 
     private fun isModified(): Boolean {

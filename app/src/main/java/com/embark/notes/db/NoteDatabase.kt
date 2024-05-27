@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.embark.notes.model.Note
 
-@Database(entities = [Note::class], version = 3)
+@Database(entities = [Note::class], version = 4)
 abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
 
@@ -14,6 +14,9 @@ abstract class NoteDatabase : RoomDatabase() {
 
         @JvmField
         val MIGRATION_2_3 = Migration2to3()
+
+        @JvmField
+        val MIGRATION_3_4 = Migration3to4()
     }
 
 }

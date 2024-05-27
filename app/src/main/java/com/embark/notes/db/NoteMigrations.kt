@@ -23,11 +23,9 @@ class Migration1to2 : Migration(1, 2) {
                     " SELECT ${Constants.DB_TITLE}, ${Constants.DB_CONTENT}, ${Constants.DB_IS_PINNED} FROM ${Constants.DB_NAME}"
         )
 
-
         db.execSQL("DROP TABLE ${Constants.DB_NAME}")
         db.execSQL("ALTER TABLE $TEMP_TABLE_NAME RENAME TO ${Constants.DB_NAME}")
     }
-
 }
 
 class Migration2to3 : Migration(2, 3) {
@@ -35,5 +33,10 @@ class Migration2to3 : Migration(2, 3) {
         db.execSQL("ALTER TABLE ${Constants.DB_NAME} ADD COLUMN ${Constants.DB_LAST_MODIFIED} INTEGER")
 
     }
+}
 
+class Migration3to4 : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE ${Constants.DB_NAME} ADD COLUMN ${Constants.DB_CREATED_AT} INTEGER")
+    }
 }

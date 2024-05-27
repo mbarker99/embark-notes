@@ -12,5 +12,6 @@ data class Note(
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "content") val content: String?,
     @ColumnInfo(name = "isPinned") var isPinned: Boolean? = false,
-    @ColumnInfo(name = "lastModified") val lastModified: Long
+    @ColumnInfo(name = "lastModified") val lastModified: Long,
+    @ColumnInfo(name = "createdAt") val createdAt: Long?
 )
