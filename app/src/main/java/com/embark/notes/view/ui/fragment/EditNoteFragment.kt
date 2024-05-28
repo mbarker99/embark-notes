@@ -1,6 +1,7 @@
 package com.embark.notes.view.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -28,49 +29,61 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
 
     private fun setupUI() {
         binding?.apply {
+
+            topAppBar.setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
+
+            topAppBar.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.delete -> {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.delete_note_dialog_title))
+                            .setMessage(getString(R.string.delete_note_dialog_message))
+                            .setPositiveButton(getString(R.string.delete_note_positive_button)) { dialog, _ ->
+                                viewModel.selectedNote?.let { note -> viewModel.delete(note) }
+                                toBeDeleted = true
+                                dialog.dismiss()
+                                findNavController().popBackStack()
+                            }
+                            .setNegativeButton(getString(R.string.delete_note_negative_button)) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .show()
+                        true
+                    }
+
+                    R.id.pin -> {
+                        if (tempIsPinned) {
+                            Log.d(TAG, "topAppBar Unpinned")
+                            menuItem.setIcon(R.drawable.ic_unpinned_24)
+                        } else {
+                            Log.d(TAG, "topAppBar Pinned")
+                            menuItem.setIcon(R.drawable.ic_pinned_24)
+                        }
+                        tempIsPinned = !tempIsPinned
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
             if (viewModel.selectedNote != null) {
                 etNoteTitle.setText(viewModel.selectedNote?.title ?: "")
                 etNoteContent.setText(viewModel.selectedNote?.content ?: "")
                 tempIsPinned = viewModel.selectedNote?.isPinned == true
             } else {
-                ivDelete.visibility = View.GONE
-                ivPin.visibility = View.GONE
+                // TODO : hide top bar menu options
             }
 
+            val pinItem = topAppBar.menu.findItem(R.id.pin)
             if (viewModel.selectedNote?.isPinned == true) {
-                ivPin.setImageResource(R.drawable.ic_pinned_24)
+                pinItem.setIcon(R.drawable.ic_pinned_24)
             } else {
-                ivPin.setImageResource(R.drawable.ic_unpinned_24)
+                pinItem.setIcon(R.drawable.ic_unpinned_24)
             }
 
-            ivBackArrow.setOnClickListener {
-                findNavController().popBackStack()
-            }
-
-            ivDelete.setOnClickListener {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.delete_note_dialog_title))
-                    .setMessage(getString(R.string.delete_note_dialog_message))
-                    .setPositiveButton(getString(R.string.delete_note_positive_button)) { dialog, _ ->
-                        viewModel.selectedNote?.let { note -> viewModel.delete(note) }
-                        toBeDeleted = true
-                        dialog.dismiss()
-                        findNavController().popBackStack()
-                    }
-                    .setNegativeButton(getString(R.string.delete_note_negative_button)) { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
-            }
-
-            ivPin.setOnClickListener {
-                if (tempIsPinned) {
-                    ivPin.setImageResource(R.drawable.ic_unpinned_24)
-                } else {
-                    ivPin.setImageResource(R.drawable.ic_pinned_24)
-                }
-                tempIsPinned = !tempIsPinned
-            }
         }
     }
 

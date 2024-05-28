@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/main_item"
+        android:title="Categories">
+        <menu>
+            <item
+                android:id="@+id/notes"
+                android:checkable="true"
+                android:icon="@drawable/ic_notes_24"
+                android:title="@string/notes"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/reminders"
+                android:checkable="true"
+                android:icon="@drawable/ic_reminder_24"
+                android:title="@string/reminders"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/archive"
+                android:checkable="true"
+                android:icon="@drawable/ic_archive_24"
+                android:title="@string/archived"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/dashboard_item"
+                android:checkable="true"
+                android:icon="@drawable/ic_settings_24"
+                android:title="@string/settings"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/labels_item"
+        android:title="@string/labels">
+        <menu>
+            <item
+                android:id="@+id/label_one"
+                android:checkable="true"
+                android:title="Label One"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/label_two"
+                android:checkable="true"
+                android:title="Label Two"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+
+
+</menu>

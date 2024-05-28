@@ -13,4 +13,10 @@
     <string name="delete_note_positive_button">Delete</string>
     <string name="delete_note_negative_button">Cancel</string>
     <string name="searchbar_hint">Search your notes</string>
+
+    <string name="notes">Notes</string>
+    <string name="reminders">Reminders</string>
+    <string name="archived">Archived</string>
+    <string name="settings">Settings</string>
+    <string name="labels">Labels</string>
 </resources>

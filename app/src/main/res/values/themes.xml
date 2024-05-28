@@ -1,5 +1,4 @@
 <resources>
-
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -12,5 +11,6 @@
         <item name="colorSurface">@color/md_theme_surface</item>
         <item name="colorOnSurface">@color/md_theme_onSurface</item>
         <item name="snackbarStyle">@style/Widget.Material3.Snackbar</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>

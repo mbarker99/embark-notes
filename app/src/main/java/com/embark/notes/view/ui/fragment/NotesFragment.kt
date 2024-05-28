@@ -70,6 +70,16 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             rvUnpinnedNotes.adapter = unpinnedNotesAdapter
 
+            searchBar.setNavigationOnClickListener {
+                main.open()
+            }
+            navigationView.setNavigationItemSelectedListener { menuItem ->
+                // Handle menu item selected
+                menuItem.isChecked = true
+                main.close()
+                true
+            }
+
             searchBar.inflateMenu(R.menu.search_bar)
             searchBar.setOnMenuItemClickListener {
                 when (it.itemId) {
