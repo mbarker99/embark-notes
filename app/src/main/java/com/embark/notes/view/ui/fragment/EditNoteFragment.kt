@@ -1,6 +1,7 @@
 package com.embark.notes.view.ui.fragment
 
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -11,6 +12,10 @@ import com.embark.notes.databinding.FragmentEditNoteBinding
 import com.embark.notes.model.Note
 import com.embark.notes.viewmodel.NoteViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
@@ -73,15 +78,29 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                 etNoteTitle.setText(viewModel.selectedNote?.title ?: "")
                 etNoteContent.setText(viewModel.selectedNote?.content ?: "")
                 tempIsPinned = viewModel.selectedNote?.isPinned == true
-            } else {
-                // TODO : hide top bar menu options
-            }
 
-            val pinItem = topAppBar.menu.findItem(R.id.pin)
-            if (viewModel.selectedNote?.isPinned == true) {
-                pinItem.setIcon(R.drawable.ic_pinned_24)
+                val pinItem = topAppBar.menu.findItem(R.id.pin)
+                if (viewModel.selectedNote?.isPinned == true) {
+                    pinItem.setIcon(R.drawable.ic_pinned_24)
+                } else {
+                    pinItem.setIcon(R.drawable.ic_unpinned_24)
+                }
+
+                viewModel.selectedNote?.lastModified?.let {
+                    if (DateUtils.isToday(it)) {
+                        val dateTimeFormatter =
+                            DateTimeFormatter.ofPattern("h:mm a")
+                                .withLocale(Locale.getDefault())
+                                .withZone(ZoneId.systemDefault())
+
+                        val date = dateTimeFormatter.format(Instant.ofEpochMilli(it))
+                        topAppBar.subtitle = "Edited at $date"
+                    } else {
+                        // TODO : Add date time formatter for Month / Day
+                    }
+                }
             } else {
-                pinItem.setIcon(R.drawable.ic_unpinned_24)
+                topAppBar.menu.clear()
             }
 
         }
@@ -100,8 +119,8 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                 if (!etNoteTitle.text.isNullOrBlank() || !etNoteContent.text.isNullOrBlank()) {
                     viewModel.insert(
                         Note(
-                            title = this.etNoteTitle.text.toString(),
-                            content = this.etNoteContent.text.toString(),
+                            title = etNoteTitle.text.toString(),
+                            content = etNoteContent.text.toString(),
                             lastModified = System.currentTimeMillis(),
                             createdAt = System.currentTimeMillis()
                         )
@@ -118,7 +137,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                             content = etNoteContent.text.toString(),
                             isPinned = tempIsPinned,
                             lastModified = System.currentTimeMillis(),
-                            createdAt = viewModel.selectedNote!!.createdAt
+                            createdAt = viewModel.selectedNote?.createdAt
                         )
                     )
                 }
@@ -128,8 +147,8 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
     }
 
     private fun isModified(): Boolean {
-        return binding!!.etNoteTitle.text.toString() != viewModel.selectedNote?.title ||
-                binding!!.etNoteContent.text.toString() != viewModel.selectedNote?.content ||
+        return binding?.etNoteTitle?.text.toString() != viewModel.selectedNote?.title ||
+                binding?.etNoteContent?.text.toString() != viewModel.selectedNote?.content ||
                 viewModel.selectedNote?.isPinned != tempIsPinned
     }
 

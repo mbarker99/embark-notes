@@ -9,21 +9,21 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.embark.notes.R
-import com.embark.notes.databinding.FragmentMainBinding
+import com.embark.notes.databinding.FragmentNotesBinding
 import com.embark.notes.model.Note
 import com.embark.notes.view.ui.adapter.NotesAdapter
 import com.embark.notes.view.ui.adapter.NotesAdapter.OnNoteClickedListener
 import com.embark.notes.viewmodel.NoteViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class NotesFragment : Fragment(R.layout.fragment_main) {
+class NotesFragment : Fragment(R.layout.fragment_notes) {
 
     companion object {
         private const val TAG = "MainFragment"
         fun newInstance() = NotesFragment()
     }
 
-    private lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentNotesBinding
     private val viewModel: NoteViewModel by activityViewModels()
 
     private val pinnedNotesAdapter: NotesAdapter by lazy {
@@ -48,7 +48,7 @@ class NotesFragment : Fragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentMainBinding.bind(view)
+        binding = FragmentNotesBinding.bind(view)
         setupUI()
         setupObservers()
     }

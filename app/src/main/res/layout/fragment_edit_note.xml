@@ -16,7 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="16dp">
+            android:layout_marginHorizontal="32dp">
 
             <EditText
                 android:id="@+id/et_note_title"
@@ -24,11 +24,13 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:backgroundTint="@color/md_theme_primary"
-                android:hint="@string/title"
+                android:hint="@string/title_hint"
+                android:imeOptions="actionNext"
                 android:inputType="text|textMultiLine"
                 android:maxLength="1000"
                 android:paddingVertical="8dp"
                 android:textSize="24sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,7 +41,7 @@
                 android:background="@null"
                 android:backgroundTint="@color/md_theme_primary"
                 android:gravity="start"
-                android:hint="@string/note"
+                android:hint="@string/note_hint"
                 android:inputType="text|textMultiLine"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -61,8 +63,19 @@
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             app:menu="@menu/edit_note_top_bar"
-            app:navigationIcon="@drawable/ic_back_arrow_24" />
+            app:navigationIcon="@drawable/ic_back_arrow_24"
+            app:subtitle="Edited 10:00 AM"
+            app:subtitleCentered="true"
+            app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            tools:subtitle="Edited at 12:00 AM" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_app_bar"
+        style="@style/Widget.Material3.BottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
