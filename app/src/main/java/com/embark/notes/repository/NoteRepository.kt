@@ -9,10 +9,6 @@ class NoteRepository @Inject constructor(private val db: NoteDatabase) {
 
     suspend fun getAllNotesByName(title: String): List<Note> = db.noteDao().getAllNotesByName(title)
 
-    suspend fun getAllPinnedNotes(): List<Note> = db.noteDao().getAllPinnedNotes()
-
-    suspend fun getAllUnpinnedNotes(): List<Note> = db.noteDao().getAllUnpinnedNotes()
-
     suspend fun insertAll(vararg notes: Note) = db.noteDao().insertAll(*notes)
 
     suspend fun delete(note: Note) = db.noteDao().delete(note)

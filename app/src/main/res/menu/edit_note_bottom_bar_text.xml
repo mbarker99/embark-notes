@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/bold"
+        android:icon="@drawable/ic_format_bold_24"
+        android:title="Bold"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/italic"
+        android:icon="@drawable/ic_format_italic_24"
+        android:title="Italic"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/strikethrough"
+        android:icon="@drawable/ic_format_strikethrough_24"
+        android:title="Strikethrough"
+        app:showAsAction="ifRoom" />
+</menu>

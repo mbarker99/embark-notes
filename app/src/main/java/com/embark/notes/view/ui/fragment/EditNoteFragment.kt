@@ -53,8 +53,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                             }
                             .setNegativeButton(getString(R.string.delete_note_negative_button)) { dialog, _ ->
                                 dialog.dismiss()
-                            }
-                            .show()
+                            }.create().show()
                         true
                     }
 
@@ -74,6 +73,25 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                 }
             }
 
+            bottomAppBar.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.add -> {
+                        // Handle accelerator icon press
+                        true
+                    }
+
+                    R.id.change_color -> {
+                        // Handle rotation icon press
+                        true
+                    }
+
+                    R.id.edit_text -> {
+                        true
+                    }
+
+                    else -> false
+                }
+            }
             if (viewModel.selectedNote != null) {
                 etNoteTitle.setText(viewModel.selectedNote?.title ?: "")
                 etNoteContent.setText(viewModel.selectedNote?.content ?: "")
@@ -94,13 +112,14 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                                 .withZone(ZoneId.systemDefault())
 
                         val date = dateTimeFormatter.format(Instant.ofEpochMilli(it))
-                        topAppBar.subtitle = "Edited at $date"
+                        topAppBar.subtitle = "Edited $date"
                     } else {
                         // TODO : Add date time formatter for Month / Day
                     }
                 }
             } else {
                 topAppBar.menu.clear()
+                topAppBar.subtitle = ""
             }
 
         }
@@ -137,7 +156,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                             content = etNoteContent.text.toString(),
                             isPinned = tempIsPinned,
                             lastModified = System.currentTimeMillis(),
-                            createdAt = viewModel.selectedNote?.createdAt
+                            createdAt = viewModel.selectedNote!!.createdAt
                         )
                     )
                 }

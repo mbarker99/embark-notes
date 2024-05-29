@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.embark.notes.db.NoteDao
 import com.embark.notes.db.NoteDatabase
+import com.embark.notes.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,13 +26,8 @@ class AppModule {
         Room.databaseBuilder(
             context,
             NoteDatabase::class.java,
-            "NoteDatabase"
+            Constants.DB_NAME
         ).fallbackToDestructiveMigration()
-            .addMigrations(
-                NoteDatabase.MIGRATION_1_2,
-                NoteDatabase.MIGRATION_2_3,
-                NoteDatabase.MIGRATION_3_4
-            )
             .build()
 
 }

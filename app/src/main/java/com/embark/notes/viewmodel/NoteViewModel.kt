@@ -63,4 +63,9 @@ class NoteViewModel @Inject internal constructor(
         }
     }
 
+    companion object {
+        const val DISPLAY_TYPE_STAGGERED_GRID = 0
+        const val DISPLAY_TYPE_LINEAR = 1
+    }
+
 }

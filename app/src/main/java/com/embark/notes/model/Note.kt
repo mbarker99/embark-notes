@@ -6,12 +6,14 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Note(
+    val title: String?,
+    val content: String?,
+    val lastModified: Long,
+    val createdAt: Long,
+    var label: String? = null,
+    @ColumnInfo(defaultValue = "0") var isPinned: Boolean = false,
+    @ColumnInfo(defaultValue = "0") var isArchived: Boolean = false,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "index")
-    val index: Long = 0L,
-    @ColumnInfo(name = "title") val title: String?,
-    @ColumnInfo(name = "content") val content: String?,
-    @ColumnInfo(name = "isPinned") var isPinned: Boolean? = false,
-    @ColumnInfo(name = "lastModified") val lastModified: Long,
-    @ColumnInfo(name = "createdAt") val createdAt: Long?
+    val index: Long = 0L
 )

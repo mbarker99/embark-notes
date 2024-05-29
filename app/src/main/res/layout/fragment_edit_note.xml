@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/AppTheme"
+    android:theme="@style/Theme.App"
     tools:context=".view.ui.fragment.EditNoteFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -28,6 +28,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="text|textMultiLine"
                 android:maxLength="1000"
+                android:defaultFocusHighlightEnabled="true"
                 android:paddingVertical="8dp"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -76,6 +77,9 @@
         style="@style/Widget.Material3.BottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        android:gravity="end"
+        app:layout_anchorGravity="end"
+        app:menu="@menu/edit_note_bottom_bar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
