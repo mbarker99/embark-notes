@@ -111,6 +111,17 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 return@setOnMenuItemClickListener true
             }
 
+            bottomAppBar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.checklist -> {
+                        findNavController().navigate(R.id.action_mainFragment_to_newNoteFragment)
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
 
 
             if (viewModel.discardingEmptyNote) {

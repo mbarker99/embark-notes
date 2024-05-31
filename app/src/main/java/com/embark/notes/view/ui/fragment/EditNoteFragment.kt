@@ -30,6 +30,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentEditNoteBinding.bind(view)
         setupUI()
+        Log.d(TAG, "checklist::${viewModel.selectedNote?.checklist}")
     }
 
     private fun setupUI() {
@@ -141,7 +142,9 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                             title = etNoteTitle.text.toString(),
                             content = etNoteContent.text.toString(),
                             lastModified = System.currentTimeMillis(),
-                            createdAt = System.currentTimeMillis()
+                            createdAt = System.currentTimeMillis(),
+                            isChecklist = true,
+                            checklist = listOf("bread", "eggs", "milk")
                         )
                     )
                 } else {

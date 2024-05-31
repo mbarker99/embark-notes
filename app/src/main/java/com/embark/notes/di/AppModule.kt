@@ -2,6 +2,7 @@ package com.embark.notes.di
 
 import android.content.Context
 import androidx.room.Room
+import com.embark.notes.db.NoteConverters
 import com.embark.notes.db.NoteDao
 import com.embark.notes.db.NoteDatabase
 import com.embark.notes.util.Constants
@@ -28,6 +29,7 @@ class AppModule {
             NoteDatabase::class.java,
             Constants.DB_NAME
         ).fallbackToDestructiveMigration()
+            .addTypeConverter(NoteConverters())
             .build()
 
 }

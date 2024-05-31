@@ -13,6 +13,8 @@ data class Note(
     var label: String? = null,
     @ColumnInfo(defaultValue = "0") var isPinned: Boolean = false,
     @ColumnInfo(defaultValue = "0") var isArchived: Boolean = false,
+    @ColumnInfo(defaultValue = "0") var isChecklist: Boolean = false,
+    val checklist: List<String>? = null,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "index")
     val index: Long = 0L
