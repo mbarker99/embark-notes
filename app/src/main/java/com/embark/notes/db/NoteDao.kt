@@ -11,11 +11,14 @@ import com.embark.notes.util.Constants
 
 @Dao
 interface NoteDao {
-    @Query("SELECT * FROM ${Constants.DB_TABLE_NAME} ORDER BY ${Constants.DB_LAST_MODIFIED} DESC")
+    @Query("SELECT * FROM ${Constants.DB_TABLE_NAME} WHERE ${Constants.DB_IS_ARCHIVED} = '0' ORDER BY ${Constants.DB_LAST_MODIFIED} DESC")
     suspend fun getAllNotes(): List<Note>
 
     @Query("SELECT * FROM ${Constants.DB_TABLE_NAME} WHERE ${Constants.DB_TITLE} LIKE :${Constants.DB_TITLE} LIMIT 1")
     suspend fun getAllNotesByName(title: String): List<Note>
+
+    @Query("SELECT * FROM ${Constants.DB_TABLE_NAME} WHERE ${Constants.DB_IS_ARCHIVED} = '1' ORDER BY ${Constants.DB_LAST_MODIFIED} DESC")
+    suspend fun getAllArchivedNotes(): List<Note>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg notes: Note)

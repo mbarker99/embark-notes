@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.embark.notes.R
 import com.embark.notes.model.Note
 import com.embark.notes.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,9 @@ class NoteViewModel @Inject internal constructor(
     var editedNote: Note? = null
 
     var discardingEmptyNote = false
+    var archivingNote = false
+
+    var navLocation = R.id.notes
 
     private val mGetAllNotesLiveData: MutableLiveData<List<Note>> = MutableLiveData<List<Note>>()
     val getAllNotesLiveData: LiveData<List<Note>> = mGetAllNotesLiveData
@@ -44,6 +48,16 @@ class NoteViewModel @Inject internal constructor(
     fun getAllNotes() {
         viewModelScope.launch {
             notes = noteRepository.getAllNotes()
+            mGetAllNotesLiveData.postValue(notes)
+
+            pinnedNotes = notes.filter { it.isPinned == true }
+            unpinnedNotes = notes.filter { it.isPinned == false }
+        }
+    }
+
+    fun getArchivedNotes() {
+        viewModelScope.launch {
+            notes = noteRepository.getAllArchivedNotes()
             mGetAllNotesLiveData.postValue(notes)
 
             pinnedNotes = notes.filter { it.isPinned == true }

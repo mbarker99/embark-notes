@@ -64,18 +64,39 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 findNavController().navigate(R.id.action_mainFragment_to_newNoteFragment)
             }
 
-            viewModel.getAllNotes()
+            if (viewModel.navLocation == R.id.notes) {
+                viewModel.getAllNotes()
+            } else {
+                viewModel.getArchivedNotes()
+            }
+
+            handleNoNotesVisibility()
+            handlePinVisibility()
             Log.d(TAG, "Notes: viewModel.notes = ${viewModel.notes}")
 
             searchBar.setNavigationOnClickListener {
                 main.open()
             }
+
+            Log.d(TAG, "Setting checked item to ${viewModel.navLocation}")
             navigationView.setNavigationItemSelectedListener { menuItem ->
                 // Handle menu item selected
                 menuItem.isChecked = true
+                when (menuItem.itemId) {
+                    R.id.notes -> {
+                        viewModel.navLocation = R.id.notes
+                        viewModel.getAllNotes()
+                    }
+
+                    R.id.archive -> {
+                        viewModel.navLocation = R.id.archive
+                        viewModel.getArchivedNotes()
+                    }
+                }
                 main.close()
                 true
             }
+            navigationView.setCheckedItem(navigationView.menu.findItem(viewModel.navLocation))
 
             searchBar.inflateMenu(R.menu.search_bar)
             searchBar.setOnMenuItemClickListener {
@@ -122,8 +143,6 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 }
             }
 
-
-
             if (viewModel.discardingEmptyNote) {
                 Snackbar.make(
                     binding?.root as View,
@@ -132,6 +151,16 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 ).setAnchorView(binding?.bottomAppBar)
                     .show()
                 viewModel.discardingEmptyNote = false
+            }
+
+            if (viewModel.archivingNote) {
+                Snackbar.make(
+                    binding?.root as View,
+                    R.string.note_archived,
+                    Snackbar.LENGTH_LONG
+                ).setAnchorView(binding?.bottomAppBar)
+                    .show()
+                viewModel.archivingNote = false
             }
 
             val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)

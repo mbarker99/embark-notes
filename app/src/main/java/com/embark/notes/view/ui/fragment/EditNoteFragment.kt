@@ -25,6 +25,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
 
     private var tempIsPinned = false
     private var toBeDeleted = false
+    private var tempIsArchived = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +41,10 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                 findNavController().popBackStack()
             }
 
+            if (viewModel.selectedNote?.isArchived == true) {
+                topAppBar.menu.findItem(R.id.archive).isVisible = false
+                topAppBar.menu.findItem(R.id.pin).isVisible = false
+            }
             topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.delete -> {
@@ -70,6 +75,16 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                         true
                     }
 
+                    R.id.archive -> {
+                        viewModel.selectedNote?.let {
+                            tempIsArchived = !it.isArchived
+                        }
+                        viewModel.archivingNote = true
+                        requireActivity().supportFragmentManager.popBackStack()
+                        Log.d("TAG", "Archived pressed, tempIsArchived = $tempIsArchived")
+                        true
+                    }
+
                     else -> false
                 }
             }
@@ -97,6 +112,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                 etNoteTitle.setText(viewModel.selectedNote?.title ?: "")
                 etNoteContent.setText(viewModel.selectedNote?.content ?: "")
                 tempIsPinned = viewModel.selectedNote?.isPinned == true
+                tempIsArchived = viewModel.selectedNote?.isArchived == true
 
                 val pinItem = topAppBar.menu.findItem(R.id.pin)
                 if (viewModel.selectedNote?.isPinned == true) {
@@ -143,8 +159,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                             content = etNoteContent.text.toString(),
                             lastModified = System.currentTimeMillis(),
                             createdAt = System.currentTimeMillis(),
-                            isChecklist = true,
-                            checklist = listOf("bread", "eggs", "milk")
+                            isArchived = tempIsArchived
                         )
                     )
                 } else {
@@ -159,7 +174,8 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
                             content = etNoteContent.text.toString(),
                             isPinned = tempIsPinned,
                             lastModified = System.currentTimeMillis(),
-                            createdAt = viewModel.selectedNote!!.createdAt
+                            createdAt = viewModel.selectedNote!!.createdAt,
+                            isArchived = tempIsArchived
                         )
                     )
                 }
@@ -171,7 +187,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note) {
     private fun isModified(): Boolean {
         return binding?.etNoteTitle?.text.toString() != viewModel.selectedNote?.title ||
                 binding?.etNoteContent?.text.toString() != viewModel.selectedNote?.content ||
-                viewModel.selectedNote?.isPinned != tempIsPinned
+                viewModel.selectedNote?.isPinned != tempIsPinned || viewModel.selectedNote?.isArchived != tempIsArchived
     }
 
     companion object {

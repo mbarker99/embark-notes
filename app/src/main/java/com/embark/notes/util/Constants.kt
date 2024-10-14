@@ -9,5 +9,6 @@ object Constants {
     const val DB_IS_PINNED = "isPinned"
     const val DB_LAST_MODIFIED = "lastModified"
     const val DB_CREATED_AT = "createdAt"
+    const val DB_IS_ARCHIVED = "isArchived"
 
 }

@@ -8,25 +8,26 @@
             android:checkable="true"
             android:icon="@drawable/ic_notes_24"
             android:title="@string/notes"
+            android:checked="true"
             app:showAsAction="ifRoom" />
-        <item
+        <!--<item
             android:id="@+id/reminders"
             android:checkable="true"
             android:icon="@drawable/ic_reminder_24"
             android:title="@string/reminders"
-            app:showAsAction="ifRoom" />
+            app:showAsAction="ifRoom" />-->
         <item
             android:id="@+id/archive"
             android:checkable="true"
             android:icon="@drawable/ic_archive_24"
             android:title="@string/archived"
             app:showAsAction="ifRoom" />
-        <item
+        <!--<item
             android:id="@+id/dashboard_item"
             android:checkable="true"
             android:icon="@drawable/ic_settings_24"
             android:title="@string/settings"
-            app:showAsAction="ifRoom" />
+            app:showAsAction="ifRoom" />-->
 
         <item
             android:id="@+id/labels_item"
